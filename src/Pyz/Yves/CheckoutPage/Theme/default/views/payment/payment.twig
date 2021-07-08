@@ -1,0 +1,103 @@
+{% extends view('payment', '@SprykerShop:CheckoutPage') %}
+
+{% define data = {
+    stepNumder: 3,
+} %}
+
+{% block containerClass %}container--small{% endblock %}
+
+{% block content %}
+    <h5 class="title title--second">{{ 'page.checkout.payment.title' | trans }}</h5>
+
+    {% embed molecule('form') with {
+        modifiers: ['checkout-form'],
+        data: {
+            form: data.forms.payment,
+            options: {
+                attr: {
+                    id: 'payment-form',
+                },
+            },
+            submit: {
+                enable: true,
+                text: 'checkout.step.summary' | trans,
+                class: 'form__action--expand-sm-md button button--big',
+            },
+            cancel: {
+                enable: true,
+                url: data.backUrl,
+                text: 'general.back.button' | trans,
+                icon: '',
+                class: 'form__action--expand-sm-md button button--big button--hollow-icon button--back',
+            },
+        },
+    } only %}
+        {% block fieldset %}
+            {% for choices in data.form.paymentSelection.vars.choices %}
+                {% set paymentProviderIndex = loop.index0 %}
+                {% embed molecule('checkout-list', 'CheckoutPage') with {
+                    class: 'spacing-bottom spacing-bottom--bigger',
+                    data: {
+                        form: null,
+                        choices: choices,
+                        checkedValue: data.form.paymentSelection.vars.value,
+                    },
+                    embed: {
+                        form: data.form,
+                        paymentProviderIndex: paymentProviderIndex,
+                    },
+                } only %}
+                    {% block contentItem %}
+                        {% if embed.form.paymentSelection[key].vars.value == 'dummyPaymentInvoice' %}
+                            {% include atom('icon') with {
+                                modifiers: ['invoice-logo', 'payment-logo'],
+                                data: {
+                                    name: 'dummyPaymentInvoice.icon' | trans,
+                                },
+                            } only %}
+                        {% endif %}
+
+                        {% embed molecule('form') with {
+                            class: 'spacing-x spacing-x--inner spacing-x--reset',
+                            modifiers: ['checkout-form', 'hidden-actions'],
+                            data: {
+                                form: embed.form[embed.form.paymentSelection[key].vars.value],
+                                enableStart: false,
+                                enableEnd: false,
+                                layout: {
+                                    'card_expires_month': 'col col--sm-4',
+                                    'card_expires_year': 'col col--sm-8',
+                                },
+                            },
+                            embed: {
+                                index: loop.index ~ '-' ~ embed.paymentProviderIndex,
+                                toggler: embed.form.paymentSelection[key],
+                            },
+                        } only %}
+                            {% block fieldset %}
+                                {{ form_row(embed.toggler, {
+                                    required: false,
+                                    component: molecule('toggler-radio'),
+                                    attributes: {
+                                        'target-class-name': 'js-payment-method-' ~ embed.index,
+                                        'class-to-toggle': 'is-hidden',
+                                        checked: embed.index == 1,
+                                    },
+                                    rowAttr: {
+                                        class: 'toggler-radio toggler-radio--checkout ' ~ (embed.index != 1 ? 'toggler-radio--border-top-less'),
+                                    },
+                                }) }}
+
+                                <div class="col col--sm-12 is-hidden js-payment-method-{{ embed.index }}">
+                                    <div class="col col--sm-12 col--md-6">
+                                        {{ parent() }}
+                                    </div>
+                                </div>
+                            {% endblock %}
+                        {% endembed %}
+                    {% endblock %}
+                {% endembed %}
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

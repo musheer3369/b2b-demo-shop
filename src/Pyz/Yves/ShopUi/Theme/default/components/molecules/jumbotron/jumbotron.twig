@@ -1,0 +1,33 @@
+{% extends model('component') %}
+
+{% define config = {
+    name: 'jumbotron',
+    tag: 'section',
+} %}
+
+{% define data = {
+    imageUrl: '',
+    link: '',
+    content: '',
+    btnTitle: '',
+    headline: '',
+    subHeadline: '',
+} %}
+
+{% set backgroundImage = data.imageUrl is empty ?: 'background-image: url(' ~ data.imageUrl ~ '); ' %}
+
+{% block body %}
+    <div class="{{ component.renderClass(config.name ~ '__container', modifiers) }} grid grid--left {% block contentPositionClass %}grid--middle{% endblock %}" style="{{backgroundImage}}">
+        <div class="col col--sm-12 spacing-y spacing-y--bigger">
+            {% if data.content is not empty %}
+                {{ data.content | raw }}
+            {% else %}
+                <h1 class="{{config.name}}__title">{{data.headline}}</h1>
+                <h4 class="{{config.name}}__text">{{data.subHeadline}}</h4>
+            {% endif %}
+            {% if data.btnTitle %}
+                <a href="{{ data.link | trans }}" class="button button--big button--alternative">{{ data.btnTitle | trans }}</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
