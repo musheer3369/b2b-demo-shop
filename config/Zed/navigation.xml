@@ -626,4 +626,19 @@
             </storage>
         </pages>
     </maintenance>
+        <hello-world>
+            <label>Hello World</label>
+            <title>Hello World</title>
+            <bundle>hello-world</bundle>
+            <pages>
+                <greeter>
+                    <label>Greeter</label>
+                    <title>Greeter</title>
+                    <bundle>hello-world</bundle>
+                    <controller>index</controller>
+                    <action>index</action>
+                    <visible>1</visible>
+                </greeter>
+            </pages>
+        </hello-world>
 </config>

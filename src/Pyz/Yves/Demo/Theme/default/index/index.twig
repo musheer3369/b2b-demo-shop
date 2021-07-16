@@ -1,0 +1,12 @@
+{% extends template('page-layout-main') %}
+{% define data={
+
+        title: 'Hello World',
+        form: _view.demoForm
+
+} %}
+
+{% block content %}
+   <div>{{ dump(data) }}</div>
+
+{% endblock %}

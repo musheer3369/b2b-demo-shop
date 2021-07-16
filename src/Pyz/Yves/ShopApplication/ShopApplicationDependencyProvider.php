@@ -11,6 +11,8 @@ use Pyz\Yves\CompanyPage\Plugin\ShopApplication\CompanyUserRestrictionHandlerPlu
 use Pyz\Yves\CompanyWidget\Widget\MenuItemCompanyWidget;
 use Pyz\Yves\CustomerFullNameWidget\Widget\CustomerFullNameWidget;
 use Pyz\Yves\ProductSetWidget\Widget\ProductSetIdsWidget;
+use Pyz\Yves\Twig\Plugin\Application\TwigDumpApplicationPlugin;
+use Spryker\Shared\Twig\Plugin\DebugTwigPlugin;
 use Spryker\Yves\EventDispatcher\Plugin\Application\EventDispatcherApplicationPlugin;
 use Spryker\Yves\Form\Plugin\Application\FormApplicationPlugin;
 use Spryker\Yves\Http\Plugin\Application\HttpApplicationPlugin;
@@ -133,6 +135,7 @@ use SprykerShop\Yves\ShoppingListWidget\Widget\ShoppingListNavigationMenuWidget;
 use SprykerShop\Yves\ShoppingListWidget\Widget\ShoppingListSubtotalWidget;
 use SprykerShop\Yves\TabsWidget\Widget\FullTextSearchTabsWidget;
 use SprykerShop\Yves\WebProfilerWidget\Plugin\Application\WebProfilerApplicationPlugin;
+use Symfony\Bridge\Twig\Extension\DumpExtension;
 
 class ShopApplicationDependencyProvider extends SprykerShopApplicationDependencyProvider
 {
@@ -284,6 +287,8 @@ class ShopApplicationDependencyProvider extends SprykerShopApplicationDependency
             new ValidatorApplicationPlugin(),
             new SecurityApplicationPlugin(),
             new CustomerConfirmationUserCheckerApplicationPlugin(),
+            new WebProfilerApplicationPlugin(),
+            new TwigDumpApplicationPlugin()
         ];
 
         if (class_exists(WebProfilerApplicationPlugin::class)) {
